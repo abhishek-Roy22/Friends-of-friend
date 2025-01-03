@@ -33,3 +33,24 @@ export const signup = async (req, res) => {
     res.status(500).json({ error: 'Server Error' });
   }
 };
+
+export const login = async (req, res) => {
+  const { userName, password } = req.body;
+
+  try {
+    // Validate input
+    if (!userName || !password) {
+      return res.status(400).json({ message: 'All fields are required.' });
+    }
+
+    // Validate user & it's password
+    const { token, user } = await User.matchPassword(userName, password);
+    res
+      .status(200)
+      .json({
+        message: 'Login successful',
+        token,
+        user: { userName: user.userName, email: user.email },
+      });
+  } catch (error) {}
+};
