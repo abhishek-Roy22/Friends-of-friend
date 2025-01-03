@@ -45,12 +45,54 @@ export const login = async (req, res) => {
 
     // Validate user & it's password
     const { token, user } = await User.matchPassword(userName, password);
-    res
-      .status(200)
-      .json({
-        message: 'Login successful',
-        token,
-        user: { userName: user.userName, email: user.email },
-      });
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+      user: { userName: user.userName, email: user.email },
+    });
   } catch (error) {}
+};
+
+export const searchUsers = async (req, res) => {
+  try {
+    const { query } = req.query; // Search term from the query
+    if (!query) {
+      return res.status(400).json({ message: 'Search query is required.' });
+    }
+
+    const users = await User.find({
+      userName: { $regex: query, $options: 'i' }, // case-sensitive match
+    }).select('userName email'); // excludes sensitive information
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Something went wrong.' });
+  }
+};
+
+export const sendFriendRequest = async (req, res) => {
+  const { recipientId } = req.body;
+  const senderId = req.user.id; // retrive from middleware
+  try {
+    if (senderId === recipientId) {
+      return res
+        .status(400)
+        .json({ message: `You can't send a friend request to yourself` });
+    }
+
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Add friend request
+    recipient.friendRequests.push(senderId);
+    await recipient.save();
+
+    res.status(200).json({ message: 'Friend request sent successfully.' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
 };
