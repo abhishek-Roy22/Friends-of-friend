@@ -96,3 +96,35 @@ export const sendFriendRequest = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 };
+
+export const manageFriendRequest = async (req, res) => {
+  const { senderId, action } = req.body;
+  const recipientId = req.user.id; // retrive from middleware
+  try {
+    const recipient = await User.findById(recipientId);
+    if (!recipient) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Remove the senderId from friendRequest
+    recipient.friendRequests = recipient.friendRequests.filter(
+      (id) => id.toString() !== senderId
+    );
+
+    if (action === 'accept') {
+      // Add to friendList
+      recipient.friends.push(senderId);
+      const sender = await User.findById(senderId);
+      sender.friends.push(recipientId);
+      await sender.save();
+    }
+
+    recipient.save();
+    res
+      .status(200)
+      .json({ message: `friend request ${action}ed successfully.` });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+};
