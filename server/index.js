@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import connectToDb from './config/connection.js';
+import userRouter from './routes/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('Server is running');
 });
+app.use('/auth', userRouter);
 
 // Connecting to db & Creating server
 connectToDb(process.env.MONGO_URL)
