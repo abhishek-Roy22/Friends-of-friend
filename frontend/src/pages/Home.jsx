@@ -4,8 +4,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = () => {
-    console.log('Search Term:', searchTerm);
-    // Call backend API to search users
+    console.log(searchTerm);
   };
   return (
     <div className="w-full p-10">

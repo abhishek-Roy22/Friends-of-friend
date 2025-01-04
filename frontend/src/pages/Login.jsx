@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const Login = () => {
   const [error, setError] = useState({});
   const [formData, setFormData] = useState({
-    email: '',
+    userName: '',
     password: '',
   });
 
@@ -15,8 +15,8 @@ const Login = () => {
   const validateForm = () => {
     const newError = {};
 
-    if (!formData.email) {
-      newError.email = 'Email is required';
+    if (!formData.userName) {
+      newError.userName = 'userName is required';
     }
 
     if (!formData.password) {
@@ -66,25 +66,26 @@ const Login = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                htmlFor="email"
+                htmlFor="userName"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                Email address
+                User Name
               </label>
               <input
-                value={formData.email}
+                value={formData.userName}
                 onChange={handleChange}
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="Enter your email"
+                id="userName"
+                name="userName"
+                type="userName"
+                placeholder="Enter your userName"
                 className={`w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${
-                  error.email && 'ring-2 ring-rose-800'
+                  error.userName && 'ring-2 ring-rose-800'
                 }`}
               />
-              {error.email && (
-                <p className="text-xs text-rose-800 p-0 m-0">{error.email}</p>
+              {error.userName && (
+                <p className="text-xs text-rose-800 p-0 m-0">
+                  {error.userName}
+                </p>
               )}
             </div>
             <div>
