@@ -1,10 +1,12 @@
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/Navbar';
+
 const App = () => {
   return (
-    <>
-      <h1 className="underline text-3xl font-bold text-rose-800">
-        Hellow World!
-      </h1>
-    </>
+    <main className="container mx-auto bg-slate-900 min-h-screen">
+      <Navbar />
+      <Outlet />
+    </main>
   );
 };
 
