@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import FriendCard from '../components/FriendCard';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,15 +39,21 @@ const Home = () => {
           Search
         </button>
       </div>
-      <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
-        <div className="flex flex-wrap items-center gap-5">
-          <h2 className="text-lg font-bold mb-4">Friends List</h2>
-          {friends?.map((friend) => (
-            <h1 key={friend._id}>{friend.userName}</h1>
-          ))}
+      <div className="w-full flex flex-col md:flex-row gap-10">
+        <div className="flex-1 flex flex-col gap-5 p-4">
+          <h2 className="text-xl text-slate-400 font-bold mb-4">
+            Friends List
+          </h2>
+          <div className="w-full flex items-center gap-5 flex-wrap">
+            {friends?.map((friend) => (
+              <FriendCard key={friend._id} {...friend} />
+            ))}
+          </div>
         </div>
-        <div>
-          <h2 className="text-lg font-bold mb-4">Friend Recommendations</h2>
+        <div className="w-80 flex">
+          <h2 className="text-xl text-slate-400 font-bold mb-4">
+            Friend Recommendations
+          </h2>
           {/* Render friend recommendations */}
         </div>
       </div>
