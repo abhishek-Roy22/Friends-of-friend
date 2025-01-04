@@ -9,7 +9,9 @@ const Navbar = () => {
         <h1 className="text-4xl font-bold text-rose-600">FriendConnect</h1>
       </Link>
       {user ? (
-        <span className="text-xl text-slate-200">{user.user.userName}</span>
+        <span className="text-xl text-slate-200">
+          {user.userName || user.user.userName}
+        </span>
       ) : (
         <div className="flex items-center gap-5">
           <Link to="/login">

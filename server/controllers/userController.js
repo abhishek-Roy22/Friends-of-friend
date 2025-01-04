@@ -60,5 +60,14 @@ export const login = async (req, res) => {
       message: 'Login successful',
       user: { userName: user.userName, email: user.email },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+};
+
+export const logout = async (req, res) => {
+  // clear cookies
+  res.clearCookie('token', { httpOnly: true, secure: true, sameSite: null });
+  res.status(200).json({ message: 'Logout successful' });
 };

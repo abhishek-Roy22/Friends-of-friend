@@ -27,22 +27,16 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 //Session Restoration route
-app.get('/auth/restore-session', async (req, res) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
+app.get('/auth/restore-session', authMiddleware, async (req, res) => {
+  const { userId } = req.user;
   try {
-    const payload = jwt.verify(token, process.env.SECRRET_KEY);
-    const user = await User.findById(payload.userId).select('-password');
+    const user = await User.findById(userId).select('userName email');
     if (!user) {
-      return res.status(404).json({ message: 'User is not found' });
+      return res.status(404).json({ message: 'user not found' });
     }
-
     res.status(200).json(user);
   } catch (error) {
-    res.status(401).json({ message: 'Invalid or expired token' });
+    res.status(500).json({ error: error.message });
   }
 });
 

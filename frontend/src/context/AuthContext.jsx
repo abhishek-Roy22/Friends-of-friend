@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 // Create a context
 const AuthContext = createContext();
@@ -7,6 +7,24 @@ const AuthContext = createContext();
 // Create a provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const restoreSession = async () => {
+      try {
+        const res = await axios.get('auth/restore-session', {
+          withCredentials: true,
+        });
+        if (res.status !== 200) {
+          throw new Error('Invalid Route');
+        }
+        setUser(res.data);
+      } catch (error) {
+        console.error('Error restoring session:', error.message);
+      }
+    };
+
+    restoreSession();
+  }, []);
 
   const login = async (userName, password) => {
     try {
