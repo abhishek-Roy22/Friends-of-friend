@@ -23,9 +23,13 @@ export const signup = async (req, res) => {
     });
     // create jwt token
     const token = generateToken(newUser);
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: null,
+    });
     res.status(201).json({
       message: 'User Created Successfully',
-      token,
       user: { userName, email },
     });
   } catch (error) {
@@ -45,9 +49,15 @@ export const login = async (req, res) => {
 
     // Validate user & it's password
     const { token, user } = await User.matchPassword(userName, password);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: null,
+    });
+
     res.status(200).json({
       message: 'Login successful',
-      token,
       user: { userName: user.userName, email: user.email },
     });
   } catch (error) {}

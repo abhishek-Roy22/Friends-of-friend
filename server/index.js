@@ -5,6 +5,7 @@ import userRouter from './routes/auth.js';
 import { authMiddleware } from './config/middleware.js';
 import friendsRouter from './routes/friends.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Define routes
 app.get('/', (req, res) => {
