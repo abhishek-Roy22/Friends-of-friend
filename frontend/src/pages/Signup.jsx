@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -55,7 +56,7 @@ const Signup = () => {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!formValidation()) {
@@ -63,8 +64,18 @@ const Signup = () => {
       return;
     }
 
-    toast.success('Form submitted successful');
-    navigate('/');
+    try {
+      const res = await axios.post('auth/register', {
+        userName: formData.username,
+        email: formData.email,
+        password: formData.password,
+      });
+      toast.success('Form submitted successfully');
+      console.log(res.data);
+      navigate('/');
+    } catch (error) {
+      toast.error('An error occurred while submitting the form');
+    }
   }
 
   return (

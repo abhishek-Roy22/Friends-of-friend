@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -44,7 +45,7 @@ const Login = () => {
     }
   };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -52,8 +53,17 @@ const Login = () => {
       return;
     }
 
-    toast.success('Form submitted successful');
-    navigate('/');
+    try {
+      const res = await axios.post('auth/login', {
+        ...formData,
+      });
+      toast.success('Form submitted successfully');
+      console.log(res.data);
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred while submitting the form');
+    }
   }
 
   return (

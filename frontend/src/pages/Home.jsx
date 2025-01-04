@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [friends, setFriends] = useState(null);
+
+  const fetchFriendList = async () => {
+    try {
+      const res = await axios.get('friends/friends');
+      setFriends(res.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriendList();
+  }, []);
 
   const handleSearch = () => {
     console.log(searchTerm);
@@ -26,7 +41,9 @@ const Home = () => {
       <div className="flex flex-col md:flex-row gap-10 items-center justify-center">
         <div className="flex flex-wrap items-center gap-5">
           <h2 className="text-lg font-bold mb-4">Friends List</h2>
-          {/* Render friends list */}
+          {friends?.map((friend) => (
+            <h1 key={friend._id}>{friend.userName}</h1>
+          ))}
         </div>
         <div>
           <h2 className="text-lg font-bold mb-4">Friend Recommendations</h2>
