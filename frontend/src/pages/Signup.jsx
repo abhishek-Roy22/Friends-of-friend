@@ -1,10 +1,11 @@
 import axios from 'axios';
-import { ArrowLeft } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Signup = () => {
+  const { signup } = useAuth();
   const [error, setError] = useState({});
   const [formData, setFormData] = useState({
     username: '',
@@ -63,18 +64,14 @@ const Signup = () => {
       toast.error('Add required inputs');
       return;
     }
-
     try {
-      const res = await axios.post('auth/register', {
-        userName: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
-      toast.success('Form submitted successfully');
-      console.log(res.data);
+      toast.loading('Signing up');
+      await signup(formData.username, formData.email, formData.password);
+      toast.success('Signup Successful');
       navigate('/');
     } catch (error) {
-      toast.error('An error occurred while submitting the form');
+      console.log(error.message);
+      toast.error('Invalid Credential');
     }
   }
 

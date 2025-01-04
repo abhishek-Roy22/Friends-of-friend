@@ -8,8 +8,7 @@ import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import axios from 'axios';
-// import { Provider } from 'react-redux';
-// import { store } from './store/store.js';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 const appRouter = createBrowserRouter([
   {
@@ -38,8 +37,8 @@ axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <Provider store={store}> */}
-    <RouterProvider router={appRouter} />
-    {/* </Provider> */}
+    <AuthProvider>
+      <RouterProvider router={appRouter} />
+    </AuthProvider>
   </StrictMode>
 );
