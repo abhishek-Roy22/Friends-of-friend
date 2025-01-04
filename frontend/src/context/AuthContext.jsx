@@ -53,10 +53,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    // Implement logout logic here
-    // For example, you can clear the user state
-    setUser(null);
+  const logout = async () => {
+    try {
+      await axios.get('/auth/logout');
+      setUser(null);
+    } catch (error) {
+      throw new Error('Unable to logout');
+    }
   };
 
   return (
