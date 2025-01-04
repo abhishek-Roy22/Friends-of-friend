@@ -7,6 +7,7 @@ import NotFound from './components/NotFound.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
+import axios from 'axios';
 // import { Provider } from 'react-redux';
 // import { store } from './store/store.js';
 
@@ -31,6 +32,9 @@ const appRouter = createBrowserRouter([
     ],
   },
 ]);
+
+axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
