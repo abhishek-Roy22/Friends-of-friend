@@ -6,7 +6,6 @@ import { authMiddleware } from './config/middleware.js';
 import friendsRouter from './routes/friends.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import jwt from 'jsonwebtoken';
 import User from './models/userSchema.js';
 
 const app = express();
