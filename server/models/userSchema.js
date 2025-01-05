@@ -28,7 +28,10 @@ const userSchema = new Schema(
     ],
     friendRequests: [
       {
-        senderId: { type: Schema.Types.ObjectId, ref: 'User' },
+        senderId: {
+          type: Schema.Types.ObjectId,
+          ref: 'User',
+        },
         status: {
           type: String,
           enum: ['pending', 'accepted', 'rejected'],

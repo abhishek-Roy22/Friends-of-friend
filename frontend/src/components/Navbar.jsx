@@ -4,13 +4,15 @@ import { useAuth } from '../context/AuthContext';
 const Navbar = () => {
   const { user, logout } = useAuth();
   return (
-    <nav className="bg-slate-800 text-slate-200 p-4 flex justify-between sticky top-0">
+    <nav className="bg-slate-800 text-slate-200 p-2 sm:p-4 flex items-center justify-between sticky top-0">
       <Link to="/">
-        <h1 className="text-4xl font-bold text-rose-600">FriendConnect</h1>
+        <h1 className="text-lg md:text-4xl font-bold text-rose-600">
+          FriendConnect
+        </h1>
       </Link>
       {user ? (
-        <div className="flex items-center gap-5">
-          <span className="text-xl text-slate-200">
+        <div className="flex items-center gap-2 md:gap-5">
+          <span className="text-sm md:text-xl text-slate-200">
             {user.userName || user.user.userName}
           </span>
           <button
@@ -21,7 +23,7 @@ const Navbar = () => {
           </button>
         </div>
       ) : (
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2 md:gap-5">
           <Link to="/login">
             <button className="px-4 py-2 bg-transparent border-2 border-slate-400 hover:ring-2 hover:ring-rose-700 hover:text-rose-700 rounded">
               Login

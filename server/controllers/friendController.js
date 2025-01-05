@@ -35,7 +35,7 @@ export const sendFriendRequest = async (req, res) => {
 
     // Check if the friend request already exists
     const existingRequest = recipient.friendRequests.find(
-      (request) => request._id.toString() == senderId
+      (request) => request._id.toString() === senderId
     );
 
     if (existingRequest) {
@@ -55,7 +55,6 @@ export const sendFriendRequest = async (req, res) => {
 
 export const manageFriendRequest = async (req, res) => {
   const { senderId, action } = req.body;
-  console.log(senderId);
   const recipientId = req.user.userId; // Retrieve from middleware
 
   try {
@@ -98,6 +97,10 @@ export const manageFriendRequest = async (req, res) => {
 
       sender.friends.push(recipientId);
       await sender.save();
+    } else if (action === 'rejected') {
+      recipient.friendRequests = recipient.friendRequests.filter(
+        (request) => request._id.toString() !== senderId
+      );
     }
 
     // Save the recipient user
@@ -150,5 +153,34 @@ export const recommendFriends = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Something went wrong' });
+  }
+};
+
+export const getFriendRequest = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).populate(
+      'friendRequests.senderId',
+      'userName email profilePicture'
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const friendRequests = await Promise.all(
+      user.friendRequests.map(async (request) => {
+        const sender = await User.findById(request._id);
+        return {
+          id: request._id,
+          status: request.status,
+          sender,
+        };
+      })
+    );
+
+    res.status(200).json(friendRequests);
+  } catch (err) {
+    console.error('Error fetching friend requests:', err.message);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 };
