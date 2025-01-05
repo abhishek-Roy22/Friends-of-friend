@@ -32,7 +32,7 @@ const appRouter = createBrowserRouter([
   },
 ]);
 
-axios.defaults.baseURL = 'https://friends-of-friend.vercel.app//';
+axios.defaults.baseURL = 'https://friends-of-friend.vercel.app/';
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(
