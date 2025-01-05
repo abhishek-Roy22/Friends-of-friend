@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: ['https://friends-of-friend-sxny.vercel.app'],
+    origin: 'https://friends-of-friend-ui.vercel.app',
     credentials: true, // Ensure cookies and headers are allowed
   })
 );
