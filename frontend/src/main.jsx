@@ -32,7 +32,8 @@ const appRouter = createBrowserRouter([
   },
 ]);
 
-axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL =
+  'friends-of-friend-piv1zlxjj-abhishekroy22s-projects.vercel.app';
 axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById('root')).render(

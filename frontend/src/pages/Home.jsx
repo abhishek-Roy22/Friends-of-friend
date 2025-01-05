@@ -4,62 +4,16 @@ import FriendCard from '../components/FriendCard';
 import SearchFriendCard from '../components/SearchFriendCard';
 import FriendRequestedCard from '../components/FriendRequestedCard';
 import { ToastContainer, toast } from 'react-toastify';
-import { useAuth } from '../context/AuthContext';
+import useFetch from '../hook/useFetch';
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
-  const [requestedFriends, setRequestedFriends] = useState([]);
-  const [recommendedFriends, setRecommendedFriends] = useState([]);
 
-  const { user } = useAuth();
-
-  const fetchFriendList = async () => {
-    setLoading(true);
-    {
-      loading && toast.loading('Loading...');
-    }
-    try {
-      const res = await axios.get('friends/friends');
-      setFriends(res.data);
-      setLoading(false);
-    } catch (err) {
-      console.log(err.message);
-      toast.error('Please retry!');
-    }
-  };
-
-  const fetchRequestedFriend = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get('friends/friend-requests');
-      setRequestedFriends(res.data);
-    } catch (error) {
-      console.log(error.message);
-      toast.error('Unable to find friend.');
-    }
-  };
-
-  async function fetchRecommendedFriend() {
-    setLoading(true);
-    try {
-      const res = await axios.get('friends/recommendations');
-      setRecommendedFriends(res.data);
-    } catch (error) {
-      console.log(error.message);
-      toast.error('Unable to find friend.');
-    }
-  }
-
-  useEffect(() => {
-    if (user) {
-      fetchFriendList();
-      fetchRequestedFriend();
-      fetchRecommendedFriend();
-    }
-  }, []);
+  const { friends } = useFetch('friends/friends');
+  const { friends: requestedFriends } = useFetch('friends/friend-requests');
+  const { friends: recommendedFriends } = useFetch('friends/recommendations');
 
   useEffect(() => {
     if (!searchTerm) {
