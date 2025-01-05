@@ -25,8 +25,8 @@ export const signup = async (req, res) => {
     const token = generateToken(newUser);
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
+      secure: true,
+      sameSite: 'None',
     });
     res.status(201).json({
       message: 'User Created Successfully',
@@ -52,8 +52,8 @@ export const login = async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
+      secure: true,
+      sameSite: 'None',
     });
 
     res.status(200).json({
