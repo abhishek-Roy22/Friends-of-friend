@@ -101,6 +101,11 @@ export const manageFriendRequest = async (req, res) => {
       recipient.friendRequests = recipient.friendRequests.filter(
         (request) => request._id.toString() !== senderId
       );
+      const sender = await User.findById(senderId);
+      if (!sender) {
+        return res.status(404).json({ message: 'Sender user not found.' });
+      }
+      await sender.save();
     }
 
     // Save the recipient user

@@ -4,6 +4,7 @@ import FriendCard from '../components/FriendCard';
 import SearchFriendCard from '../components/SearchFriendCard';
 import FriendRequestedCard from '../components/FriendRequestedCard';
 import { ToastContainer, toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,9 @@ const Home = () => {
   const [friends, setFriends] = useState([]);
   const [searchFriends, setSearchFriends] = useState([]);
   const [requestedFriends, setRequestedFriends] = useState([]);
+  const [recommendedFriends, setRecommendedFriends] = useState([]);
+
+  const { user } = useAuth();
 
   const fetchFriendList = async () => {
     setLoading(true);
@@ -38,9 +42,23 @@ const Home = () => {
     }
   };
 
+  async function fetchRecommendedFriend() {
+    setLoading(true);
+    try {
+      const res = await axios.get('friends/recommendations');
+      setRecommendedFriends(res.data);
+    } catch (error) {
+      console.log(error.message);
+      toast.error('Unable to find friend.');
+    }
+  }
+
   useEffect(() => {
-    fetchFriendList();
-    fetchRequestedFriend();
+    if (user) {
+      fetchFriendList();
+      fetchRequestedFriend();
+      fetchRecommendedFriend();
+    }
   }, []);
 
   useEffect(() => {
@@ -83,7 +101,7 @@ const Home = () => {
           Search
         </button>
       </div>
-      <div className="w-full flex flex-wrap gap-5 ">
+      <div className="w-full flex flex-wrap gap-5">
         {requestedFriends?.map((friend) => (
           <FriendRequestedCard key={friend.id} {...friend.sender} />
         ))}
@@ -104,12 +122,16 @@ const Home = () => {
             ))}
           </div>
         </div>
-        {/* <div className="w-80 flex">
+        <div className="w-80 flex flex-col gap-2">
           <h2 className="text-xl text-slate-400 font-bold mb-4">
             Friend Recommendations
           </h2>
-          
-        </div> */}
+          <div className="w-full flex flex-wrap gap-5 justify-center">
+            {recommendedFriends?.map((friend) => (
+              <SearchFriendCard key={friend._id} {...friend} />
+            ))}
+          </div>
+        </div>
         <ToastContainer />
       </div>
     </div>
